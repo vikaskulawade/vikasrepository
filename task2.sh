@@ -6,7 +6,7 @@ var3=$(cat $var1 |grep "__FD_SETSIZE"|cut -d'_' -f4|tr -s [\\t] ' ' | cut -d' ' 
 #echo var3= $var3 
 
 var4=$(cat $var2 |grep " __FD_SETSIZE" | grep "#define"| cut -d'_' -f4| tr -s [\\t] ' '|cut -d' ' -f2)
-echo var4= $var4
+#echo var4= $var4
 
 ulimit=128000
 
@@ -23,7 +23,7 @@ var5=$(ulimit -a | grep "core file size"| cut -d')' -f2)
 echo $var5
 
 var6=$(ulimit -a | grep "stack size"|cut -d')' -f2)
-echo $var6
+#echo $var6
 size=20480
 if [ $var5 = "unlimited" -a $var6 -eq $size ]
 then
@@ -33,4 +33,28 @@ else
 fi
 
 
+var7=$( free -g|sed '3,4d' | sed 1d|cut -d':' -f2 |awk '{print $1}' )
+echo $var7
+
+var8="/etc/adserver.properties"
+var9=$(cat $var8 | grep "adserver.thread.count"|cut -d'=' -f2)
+echo $var9
+ExpectedValue=0
+if [ $var7 -eq 7 ]
+then
+        ExpectedValue=150
+else
+        ExpectedValue=400
+fi
+
+if [ $var9 -eq $ExpectedValue ]
+then
+        echo "OK"
+else
+        echo "Expected value === $ExpectedValue and Unexpected value === $var9"
+fi
+
+
+var10=$(grep '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' /etc/*.properties )
+echo $var10
 
