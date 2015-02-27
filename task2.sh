@@ -58,3 +58,28 @@ fi
 var10=$(grep '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' /etc/*.properties )
 echo $var10
 
+
+var11=$( ifconfig -a | sed '1d' |sed '2,17d'|cut -d':' -f2|awk '{print $1}'|cut -c1-6)
+
+
+echo $var11
+
+
+var12=$(echo "$var10" | grep -v "$var11"|xargs -n 1 )
+#var13=$(echo $var12 |xargs -n 1)
+#echo $var13
+
+if [ "$var12" ]
+then
+        echo "UnExpected $var12"
+else
+       echo" ok "
+fi
+
+
+
+
+
+
+
+
